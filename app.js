@@ -630,6 +630,7 @@ $("#root").on("click", ".action-button", function(){
             if(element.coin===states.usersList[states.active].selectedCoin && element.amount >= parseFloat($(".input-group input").val())){
                 element.amount -=  parseFloat($(".input-group input").val())
                 deduced = true
+                states.usersList[states.active].cash += $(".input-group input").val() * market[states.usersList[states.active].day-2].coins[coinArr.indexOf(states.usersList[states.active].selectedCoin)].close
                 $("#resultLbl").text("")
                 if(element.amount===0)
                     states.usersList[states.active].wallet.splice(states.usersList[states.active].wallet.indexOf(element), 1)
