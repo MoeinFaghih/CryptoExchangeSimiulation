@@ -107,6 +107,13 @@ function renderMainPage(){
 
 
     $("#root").html(out);
+
+    if(states.usersList[states.active].day===365){
+        $("#left").remove();
+        $("#balance").addClass("animated");
+        $("#walletContainer").css("width" , "100%");
+        $("#right").css("flex" , 1);
+    }
 }
 
 function renderDayInfo(){
@@ -512,6 +519,7 @@ $("#root").on("click", "#BtnContainer>div:first-of-type", function(e){
 
 function increamentDay(){
     states.usersList[states.active].day++;
+    
     let dateArr = market[states.usersList[states.active].day - 1].date.split("-");
     $("#dayP").text("Day " + states.usersList[states.active].day);
     $("#dateP").text(`${dateArr[0]} ${months[parseInt(dateArr[1]) - 1]} ${dateArr[2]}`)
@@ -531,6 +539,10 @@ function increamentDay(){
 
     updateBalance();
     updateWallet();
+    if(states.usersList[states.active].day===365){
+        clearInterval(timer);
+        update();
+    }
 
 }
 
