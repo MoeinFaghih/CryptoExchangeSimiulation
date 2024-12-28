@@ -376,6 +376,10 @@ div#balance{
     border: 1px solid black;
 }
 
+.candle:hover  {
+    cursor: pointer;
+}
+
 /* ======================================= */
 
 #mainBot{
