@@ -617,22 +617,26 @@ $("#root").on("mouseenter", ".candle", function(){
 $("#root").on("click", ".action-button", function(){
     if($("#buyButton").attr("class")==="active")
     {
-        $("#resultLbl").text("")
-        states.usersList[states.active].cash -= $(".input-group input").val() * market[states.usersList[states.active].day-2].coins[coinArr.indexOf(states.usersList[states.active].selectedCoin)].close
-        let added=false
-        let purch = {}
-        purch.coin = states.usersList[states.active].selectedCoin;
-        for (let element of states.usersList[states.active].wallet) {
-            if(element.coin===purch.coin){
-                element.amount +=  parseFloat($(".input-group input").val())
-                added = true
+        if($(".input-group input").val() * market[states.usersList[states.active].day-2].coins[coinArr.indexOf(states.usersList[states.active].selectedCoin)].close>states.usersList[states.active].cash)
+            $("#resultLbl").text("Not enough cash!")
+        else{
+            $("#resultLbl").text("")
+            states.usersList[states.active].cash -= $(".input-group input").val() * market[states.usersList[states.active].day-2].coins[coinArr.indexOf(states.usersList[states.active].selectedCoin)].close
+            let added=false
+            let purch = {}
+            purch.coin = states.usersList[states.active].selectedCoin;
+            for (let element of states.usersList[states.active].wallet) {
+                if(element.coin===purch.coin){
+                    element.amount +=  parseFloat($(".input-group input").val())
+                    added = true
+                }
             }
+            if(!added){
+                purch.amount = parseFloat($(".input-group input").val())
+                states.usersList[states.active].wallet.push(purch)
+            }
+            $("#resultLbl").text("")
         }
-        if(!added){
-            purch.amount = parseFloat($(".input-group input").val())
-            states.usersList[states.active].wallet.push(purch)
-        }
-        $("#resultLbl").text("")
         
     }
     else{
