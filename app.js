@@ -15,8 +15,7 @@ var coinNames = ["Cordana", "Avalanche", "Bitcoin", "DogeCoin", "Ethereum", "Pol
 
 let storedData = localStorage.getItem("states")
 //states = storedData ? JSON.parse( storedData ) : { page: 0, active: null, usersList: []}
-states = storedData ? JSON.parse( storedData ) : { page: 0, active: null, usersList: 
-    [{ name: "Hakan", wallet: [{coin: "btc", amount: 0.7}, {coin: "ada", amount: 12.6}, {coin: "eth", amount: 35.0}] , cash: 100000, day: 2 ,selectedCoin: "btc"}]}
+states = storedData ? JSON.parse( storedData ) : { page: 0, active: null, usersList: []}
 renderPage();
 
 
