@@ -16,7 +16,7 @@ var coinNames = ["Cordana", "Avalanche", "Bitcoin", "DogeCoin", "Ethereum", "Pol
 let storedData = localStorage.getItem("states")
 //states = storedData ? JSON.parse( storedData ) : { page: 0, active: null, usersList: []}
 states = storedData ? JSON.parse( storedData ) : { page: 0, active: null, usersList: 
-    [{ name: "Hakan", wallet: [{coin: "btc", amount: 0.7}, {coin: "ada", amount: 12.6}, {coin: "eth", amount: 35.0}] , cash: 364.82, day: 37 ,selectedCoin: "btc"}]}
+    [{ name: "Hakan", wallet: [{coin: "btc", amount: 0.7}, {coin: "ada", amount: 12.6}, {coin: "eth", amount: 35.0}] , cash: 100000, day: 2 ,selectedCoin: "btc"}]}
 renderPage();
 
 
@@ -154,8 +154,8 @@ function renderTable(){
                     <img src="./images/${states.usersList[states.active].selectedCoin}.png"> 
                     ${coinNames[coinArr.indexOf(states.usersList[states.active].selectedCoin)]}
                 </div>
-                <div>
-                    aaa
+                <div class="desc">
+                    
                 </div>
             </div>
             <div id="chart">
@@ -176,7 +176,7 @@ function renderTable(){
     for(let i=firstDay-2 ; i<=lastDay-2 ; i++){
         bottom = (market[i].coins[coinIndex].low - lower) / (upper - lower) * 400;
         top = (market[i].coins[coinIndex].high - lower) / (upper - lower) * 400;
-        out += `<div style="position: absolute; border: 1px solid black; bottom: ${bottom}px; height: ${ top - bottom }px; width: 0px; 
+        out += `<div class="stick" style="position: absolute; border: 1px solid black; bottom: ${bottom}px; height: ${ top - bottom }px; width: 0px; 
                     left:${7.5 + (i-firstDay+2)*9}px">
                 </div>`
 
@@ -184,14 +184,14 @@ function renderTable(){
             bigger = (market[i].coins[coinIndex].open - lower) / ( upper - lower ) * 400;
             smaller = (market[i].coins[coinIndex].close - lower) / ( upper - lower ) * 400;
             height = bigger - smaller
-            out += `<div style="position: absolute; background-color: red; left: ${5+ (i-firstDay+2)*9}px; height: ${height}px; bottom: ${smaller}px; width: 5px">
+            out += `<div class="candle" style="position: absolute; background-color: red; left: ${5+ (i-firstDay+2)*9}px; height: ${height}px; bottom: ${smaller}px; width: 5px">
                     </div>`
         }
         else{
             smaller = (market[i].coins[coinIndex].open - lower) / ( upper - lower ) * 400;
             bigger = (market[i].coins[coinIndex].close - lower) / ( upper - lower ) * 400;
             height = bigger - smaller
-            out += `<div style="position: absolute; background-color: green; left: ${5+ (i-firstDay+2)*9}px; height: ${height}px; bottom: ${smaller}px; width: 5px">
+            out += `<div class="candle" style="position: absolute; background-color: green; left: ${5+ (i-firstDay+2)*9}px; height: ${height}px; bottom: ${smaller}px; width: 5px">
                     </div>`
         }
     }
@@ -200,10 +200,10 @@ function renderTable(){
 
 
     out +=         `
-            <div id="upper">${upper.toPrecision(7)}</div>
-            <div id="Lower">${lower.toPrecision(7)}</div>
+            <div id="upper">$ ${upper.toPrecision(7)}</div>
+            <div id="Lower">$ ${lower.toPrecision(7)}</div>
             <div id="price" style="bottom: ${(market[lastDay-2].coins[coinIndex].close - lower) / ( upper - lower ) * 400}px">
-            ${(market[lastDay-2].coins[coinIndex].close).toPrecision(7) }
+            $ ${(market[lastDay-2].coins[coinIndex].close).toPrecision(7) }
             </div>
             </div>
             </div>
@@ -232,7 +232,7 @@ function updateChart(){
 
         bottom = (market[i].coins[coinIndex].low - lower) / (upper - lower) * 400;
         top = (market[i].coins[coinIndex].high - lower) / (upper - lower) * 400;
-        out += `<div style="position: absolute; border: 1px solid black; bottom: ${bottom}px; height: ${ top - bottom }px; width: 0px; 
+        out += `<div class="stick" style="position: absolute; border: 1px solid black; bottom: ${bottom}px; height: ${ top - bottom }px; width: 0px; 
                     left:${7.5 + (i-firstDay+2)*9}px">
                 </div>`
 
@@ -241,26 +241,28 @@ function updateChart(){
             bigger = (market[i].coins[coinIndex].open - lower) / ( upper -lower ) * 400;
             smaller = (market[i].coins[coinIndex].close - lower) / ( upper - lower ) * 400;
             height = bigger - smaller
-            out += `<div style="position: absolute; background-color: red; left: ${5+ (i-firstDay+2)*9}px; height: ${height}px; bottom: ${smaller}px; width: 5px">
+            out += `<div class="candle" style="position: absolute; background-color: red; left: ${5+ (i-firstDay+2)*9}px; height: ${height}px; bottom: ${smaller}px; width: 5px">
                     </div>`
         }
         else{
             smaller = (market[i].coins[coinIndex].open - lower) / ( upper -lower ) * 400;
             bigger = (market[i].coins[coinIndex].close - lower) / ( upper  - lower) * 400;
             height = bigger - smaller
-            out += `<div style="position: absolute; background-color: green; left: ${5+ (i-firstDay+2)*9}px; height: ${height}px; bottom: ${smaller}px; width: 5px">
+            out += `<div class="candle" style="position: absolute; background-color: green; left: ${5+ (i-firstDay+2)*9}px; height: ${height}px; bottom: ${smaller}px; width: 5px">
                     </div>`
         } 
     }
 
-    out+= `<div id="upper">${upper.toPrecision(7)}</div>
-            <div id="Lower">${lower.toPrecision(7)}</div>
+    out+= `<div id="upper">$ ${upper.toPrecision(7)}</div>
+            <div id="Lower">$ ${lower.toPrecision(7)}</div>
             <div id="price" style="bottom: ${(market[lastDay-2].coins[coinIndex].close - lower) / ( upper - lower ) * 400}px">
-            ${(market[lastDay-2].coins[coinIndex].close).toPrecision(7) }
+            $ ${(market[lastDay-2].coins[coinIndex].close).toPrecision(7) }
             </div>`
        
     
     $("#chart").html(out)
+    clearFeilds();
+    $("#resultLbl").text("")
 }
 
 function findUpperLimit(day0, day1, coinIndex){
@@ -311,7 +313,7 @@ function renderBalance(){
 
     for(let i of states.usersList[states.active].wallet){
          
-       balance += i.amount * market[states.usersList[states.active].day-1].coins[coinArr.indexOf(i.coin)].close
+       balance += i.amount * market[states.usersList[states.active].day-2].coins[coinArr.indexOf(i.coin)].close
     
     }
     
@@ -325,7 +327,7 @@ function updateBalance(){
 
     for(let i of states.usersList[states.active].wallet){
          
-       balance += i.amount * market[states.usersList[states.active].day-1].coins[coinArr.indexOf(i.coin)].close
+       balance += i.amount * market[states.usersList[states.active].day-2].coins[coinArr.indexOf(i.coin)].close
     
     }
     
@@ -360,8 +362,8 @@ function renderWallet(){
                             <tr class="coinRow">
                             <td> <img src="images/${i.coin}.png">${coinNames[coinArr.indexOf(i.coin)]}</td>
                             <td>${i.amount}</td>
-                            <td>${(i.amount * market[states.usersList[states.active].day-1].coins[coinArr.indexOf(i.coin)].close).toFixed(2)}</td>
-                            <td>${(market[states.usersList[states.active].day-1].coins[coinArr.indexOf(i.coin)].close).toFixed(2)}</td>
+                            <td>${(i.amount * market[states.usersList[states.active].day-2].coins[coinArr.indexOf(i.coin)].close).toFixed(2)}</td>
+                            <td>${(market[states.usersList[states.active].day-2].coins[coinArr.indexOf(i.coin)].close).toFixed(2)}</td>
                             </tr>
                             `
 
@@ -398,8 +400,8 @@ function updateWallet(){
                             <tr class="coinRow">
                             <td> <img src="images/${i.coin}.png">${coinNames[coinArr.indexOf(i.coin)]}</td>
                             <td>${i.amount}</td>
-                            <td>${(i.amount * market[states.usersList[states.active].day-1].coins[coinArr.indexOf(i.coin)].close).toFixed(2)}</td>
-                            <td>${(market[states.usersList[states.active].day-1].coins[coinArr.indexOf(i.coin)].close).toFixed(2)}</td>
+                            <td>${(i.amount * market[states.usersList[states.active].day-2].coins[coinArr.indexOf(i.coin)].close).toFixed(2)}</td>
+                            <td>${(market[states.usersList[states.active].day-2].coins[coinArr.indexOf(i.coin)].close).toFixed(2)}</td>
                             </tr>
                             `
 
@@ -440,7 +442,12 @@ function renderTrading() {
         <span>$</span>
       </div>
       <button class="action-button" id="actionButton" style="background-color: #4CAF50">Buy ${selectedCoinName}</button>
-    </div>`;
+    
+        <div id="resultLbl">
+            
+        </div>
+    
+      </div>`;
 
     return out;
 }
@@ -571,7 +578,7 @@ $("#root").on("click", ".toggle-buttons button", function () {
 
 $("#root").on("keyup", ".input-group input", function(e){
     if(e.type==="keyup"){
-        let price = ($(this).val() * market[states.usersList[states.active].day-1].coins[coinArr.indexOf(states.usersList[states.active].selectedCoin)].close).toFixed(2)
+        let price = ($(this).val() * market[states.usersList[states.active].day-2].coins[coinArr.indexOf(states.usersList[states.active].selectedCoin)].close).toFixed(2)
         let out = price;
         $(".input-group span").text(` = $ ${out}`);
     }
@@ -582,3 +589,68 @@ $("#root").on("click", ".action-button", function(){
 })
 //END Elci=============================
 
+$("#root").on("mouseenter", ".candle", function(){
+   let day = ($(this).index()+1)/2
+   let index = ($(this).index()+1)/2
+   if(states.usersList[states.active].day>120)
+        day += states.usersList[states.active].day - 121
+    let obj = market[day-1].coins[coinArr.indexOf(states.usersList[states.active].selectedCoin)];
+   $(".desc").text(`Date: ${market[day-1].date} Open: ${obj.open} Close: ${obj.close} High: ${obj.high} Low: ${obj.low}`)
+
+}).on("mouseleave", ".candle", function(){
+    $(".desc").text("")
+})
+
+
+
+$("#root").on("click", ".action-button", function(){
+    if($("#buyButton").attr("class")==="active")
+    {
+        $("#resultLbl").text("")
+        states.usersList[states.active].cash -= $(".input-group input").val() * market[states.usersList[states.active].day-2].coins[coinArr.indexOf(states.usersList[states.active].selectedCoin)].close
+        let added=false
+        let purch = {}
+        purch.coin = states.usersList[states.active].selectedCoin;
+        for (let element of states.usersList[states.active].wallet) {
+            if(element.coin===purch.coin){
+                element.amount +=  parseFloat($(".input-group input").val())
+                added = true
+            }
+        }
+        if(!added){
+            purch.amount = parseFloat($(".input-group input").val())
+            states.usersList[states.active].wallet.push(purch)
+        }
+        $("#resultLbl").text("")
+        
+    }
+    else{
+        let deduced=false
+        for (let element of states.usersList[states.active].wallet) {
+            if(element.coin===states.usersList[states.active].selectedCoin && element.amount >= parseFloat($(".input-group input").val())){
+                element.amount -=  parseFloat($(".input-group input").val())
+                deduced = true
+                $("#resultLbl").text("")
+                if(element.amount===0)
+                    states.usersList[states.active].wallet.splice(states.usersList[states.active].wallet.indexOf(element), 1)
+            }
+        }
+        
+        if(!deduced){
+            $("#resultLbl").text(`Not enough amount for ${coinNames[coinArr.indexOf(states.usersList[states.active].selectedCoin)]}`)
+        }
+    }
+
+
+    updateWallet();
+    localStorage.setItem("states", JSON.stringify(states));
+    clearFeilds()
+    
+})
+
+
+function clearFeilds(){
+    $(".input-group input").val("")
+    $(".input-group span").text(" = $")
+    
+}

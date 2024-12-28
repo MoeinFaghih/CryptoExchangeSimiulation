@@ -418,4 +418,16 @@ div#price{
     color: gray;
     position: absolute;
     left: 0;
+    z-index: -10;
+}
+
+.desc{
+    color: red;
+    font-weight: 600;
+}
+
+#resultLbl {
+    margin-top: 20px;
+    text-align: center;
+    color: red;
 }
