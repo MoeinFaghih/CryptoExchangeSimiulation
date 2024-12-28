@@ -200,10 +200,10 @@ function renderTable(){
 
 
     out +=         `
-            <div id="upper">${upper.toFixed(2)}</div>
-            <div id="Lower">${lower.toFixed(2)}</div>
+            <div id="upper">${upper.toPrecision(7)}</div>
+            <div id="Lower">${lower.toPrecision(7)}</div>
             <div id="price" style="bottom: ${(market[lastDay-2].coins[coinIndex].close - lower) / ( upper - lower ) * 400}px">
-            ${market[lastDay-2].coins[coinIndex].close }
+            ${(market[lastDay-2].coins[coinIndex].close).toPrecision(7) }
             </div>
             </div>
             </div>
@@ -250,43 +250,58 @@ function updateChart(){
             height = bigger - smaller
             out += `<div style="position: absolute; background-color: green; left: ${5+ (i-firstDay+2)*9}px; height: ${height}px; bottom: ${smaller}px; width: 5px">
                     </div>`
-        }
+        } 
+    }
 
-        out+= `<div id="upper">${upper.toFixed(2)}</div>
-            <div id="Lower">${lower.toFixed(2)}</div>
+    out+= `<div id="upper">${upper.toPrecision(7)}</div>
+            <div id="Lower">${lower.toPrecision(7)}</div>
             <div id="price" style="bottom: ${(market[lastDay-2].coins[coinIndex].close - lower) / ( upper - lower ) * 400}px">
-            ${market[lastDay-2].coins[coinIndex].close }
+            ${(market[lastDay-2].coins[coinIndex].close).toPrecision(7) }
             </div>`
        
     
     $("#chart").html(out)
-    }
 }
 
 function findUpperLimit(day0, day1, coinIndex){
-    let upper = market[day0].coins[coinIndex].close * 1.1;
-    for(let i=1;i<=day1-day0;i++)
-    {
-        if(market[day0+i].coins[coinIndex].close > 0.96 * upper)
-            if(market[day0+i].coins[coinIndex].high * 1.04 > upper)
-                upper = market[day0+i].coins[coinIndex].close * 1.04;
-
-        // if(market[day0+i].coins[coinIndex].high - market[day0].coins[coinIndex].close > (upper - market[day0].coins[coinIndex].close) * 0.8 )
-        //     upper = market[day0+i].coins[coinIndex].high * 1.04;
+    let max = market[0].coins[coinIndex].high 
+    for(let i=1;i<day1;i++){
+        if(market[i].coins[coinIndex].high > max)
+            max = market[i].coins[coinIndex].high
     }
-    return upper;
+    return(max*1.1);
+    
+    
+    // let upper = market[day0].coins[coinIndex].close * 1.1;
+    // for(let i=1;i<=day1-day0;i++) 
+    // {
+    //     if(market[day0+i].coins[coinIndex].close > 0.96 * upper)
+    //         if(market[day0+i].coins[coinIndex].high * 1.04 > upper)
+    //             upper = market[day0+i].coins[coinIndex].close * 1.04;
+
+    //     // if(market[day0+i].coins[coinIndex].high - market[day0].coins[coinIndex].close > (upper - market[day0].coins[coinIndex].close) * 0.8 )
+    //     //     upper = market[day0+i].coins[coinIndex].high * 1.04;
+    // }
+    //return upper;
 }
 
 function findLowerLimit(day0, day1, coinIndex){
-    let lower = market[day0].coins[coinIndex].close * 0.9;
-    for(let i=1;i<=day1-day0;i++)
-    {
-        // if(lower >  market[day0+i].coins[coinIndex].low * 0.8)
-        //     lower = market[day0+i].coins[coinIndex].low *0.94
-        if(market[day0].coins[coinIndex].close - market[day0+i].coins[coinIndex].low > (market[day0].coins[coinIndex].close - lower) * 0.98)
-             lower = market[day0+i].coins[coinIndex].low * 0.95;
+    let min = market[0].coins[coinIndex].low 
+    for(let i=1;i<day1;i++){
+        if(market[i].coins[coinIndex].low < min)
+            min = market[i].coins[coinIndex].low
     }
-    return lower;
+    return(min*0.9);
+    
+    // let lower = market[day0].coins[coinIndex].close * 0.9;
+    // for(let i=1;i<=day1-day0;i++)
+    // {
+    //     // if(lower >  market[day0+i].coins[coinIndex].low * 0.8)
+    //     //     lower = market[day0+i].coins[coinIndex].low *0.94
+    //     if(market[day0].coins[coinIndex].close - market[day0+i].coins[coinIndex].low > (market[day0].coins[coinIndex].close - lower) * 0.98)
+    //          lower = market[day0+i].coins[coinIndex].low * 0.95;
+    // }
+    // return lower;
 }
 
 //Hakan ===========================================================================
